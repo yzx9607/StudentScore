@@ -1,5 +1,6 @@
 # StudentScore
 基于SpringBoot+Mybatis+layui的Demo(学生成绩管理系统)
-![image](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/login.png)
-![image](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/main.png)
-![image](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/edit.jpg)
+
+![image](https://github.com/yzx9607/StudentScore/blob/master/src/main/resources/login.png)
+![image](https://github.com/yzx9607/StudentScore/blob/master/src/main/resources/admin-index.png)
+![image](https://github.com/yzx9607/StudentScore/blob/master/src/main/resources/student-index.png)
