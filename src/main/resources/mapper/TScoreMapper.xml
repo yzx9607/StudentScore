@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.score.dao.TScoreMapper">
+	<resultMap id="BaseResultMap" type="com.score.bean.TScore">
+		<id column="score_id" property="scoreId" jdbcType="INTEGER" />
+		<result column="score_value" property="scoreValue" jdbcType="INTEGER" />
+		<result column="score_type" property="scoreType" jdbcType="VARCHAR" />
+		<result column="student_id" property="studentId" jdbcType="INTEGER" />
+		<result column="student_name" property="studentName" jdbcType="VARCHAR" />
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		t_score
+		where score_id = #{scoreId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.score.bean.TScore">
+		<selectKey resultType="java.lang.Integer" keyProperty="scoreId"
+			order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into t_score (score_value, score_type, student_id
+		)
+		values
+		(#{scoreValue,jdbcType=INTEGER}, #{scoreType,jdbcType=VARCHAR},
+		#{studentId,jdbcType=INTEGER}
+		)
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.score.bean.TScore">
+		update t_score
+		set
+		score_value = #{scoreValue,jdbcType=INTEGER},
+		score_type =
+		#{scoreType,jdbcType=VARCHAR},
+		student_id =
+		#{studentId,jdbcType=INTEGER}
+		where score_id =
+		#{scoreId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select score_id, score_value, score_type, student_id
+		from t_score
+		where score_id = #{scoreId,jdbcType=INTEGER}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="com.score.bean.TScore">
+		select score_id, score_value, score_type, student_id,student_name
+		from
+		t_score c LEFT JOIN t_student s ON s.student_no=c.student_id
+		where 1=1
+		<if test="studentName !=null and studentName !=''">
+			and student_name like concat('%',#{studentName},'%')
+		</if>
+		<if test="studentId !=null and studentId !=''">
+			and student_id =#{studentId}
+		</if>
+	</select>
+
+	<select id="countByType" resultType="java.lang.Integer"
+		parameterType="com.score.bean.TScore">
+		select count(1)
+		from t_score
+		where score_type=#{scoreType}
+		and student_id=#{studentId}
+	</select>
+</mapper>

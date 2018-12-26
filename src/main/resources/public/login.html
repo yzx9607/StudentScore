@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>后台登录</title>
+		<link rel="stylesheet" type="text/css" href="assets/admin/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="assets/admin/css/login.css" />
+		<script src="assets/js/aJaxUtil.js"></script>
+		<script src="assets/js/jquery-3.3.1.min.js"></script>
+	</head>
+
+	<body>
+		<div class="m-login-bg">
+			<div class="m-login">
+				<h3>单科学生成绩管理查询系统</h3>
+				<div class="m-login-warp">
+					<form class="layui-form">
+						<div class="layui-form-item">
+							<input type="text" name="userName" required lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+						</div>
+						<div class="layui-form-item">
+							<input type="password" name="password" required lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+						</div>
+						<div class="layui-form-item">
+							<input type="radio" name="type" value="1" title="教师" checked="">
+      						<input type="radio" name="type" value="2" title="学生">
+						</div>
+						<div class="layui-form-item m-login-btn">
+							<div class="layui-inline">
+								<button class="layui-btn layui-btn-normal" lay-submit lay-filter="login">登录</button>
+							</div>
+							<div class="layui-inline">
+								<button type="reset" class="layui-btn layui-btn-primary">取消</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<p class="copyright">Copyright 2018-2019 by 华北水利水电</p>
+			</div>
+		</div>
+		<script src="assets/admin/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			layui.use(['form', 'layedit', 'laydate','jquery'], function() {
+				var form = layui.form,
+					layer = layui.layer,
+					admin = layui.admin,
+					$ = layui.jquery;
+
+				//自定义验证规则
+				form.verify({
+					userName: function(value) {
+						if(value.length < 4) {
+							return '用户名至少4个字符';
+						}
+					},
+					password: [/(.+){5,12}$/, '密码必须5到12位']
+					
+				});
+				//监听提交
+				form.on('submit(login)', function(data) {
+					   var str = JSON.stringify(data.field);
+			            var param = JSON.parse(str);
+			     		if("1"==param.type){
+			     			$.ajax({
+				                //几个参数需要注意一下
+				                    type: "POST",//方法类型
+				                    dataType: "json",//预期服务器返回的数据类型
+				                    url: "/user/login",//url
+				                    data: param,
+				                    success: function (result) {
+				                    	if (result.code == "0") {
+						                       location.href="/index.html";
+						                    } else {
+						                        layer.msg('用户名密码错误', {
+						                            icon: 5
+						                        });
+						                    }
+				                    },
+				                    error : function() {
+				                    	layer.msg('服务器错误', {
+				                            icon: 5
+				                        });
+				                    }
+				                });
+			     		}else{
+			     			debugger;
+			     			var userName=param.userName;
+			     			var reg=/^[\d]{6,10}$/;
+			     			if(userName.length>10){
+			     				layer.msg('学号长度不能大于10位', {
+		                            icon: 5
+		                        });
+			     			}
+			     			if(reg.test(userName)){
+			     				$.ajax({
+					                //几个参数需要注意一下
+					                    type: "POST",//方法类型
+					                    dataType: "json",//预期服务器返回的数据类型
+					                    url: "/user/studentLogin",//url
+					                    data: param,
+					                    success: function (result) {
+					                    	if (result.code == "0") {
+							                       location.href="/student-index.html";
+							                    } else {
+							                        layer.msg('用户名密码错误', {
+							                            icon: 5
+							                        });
+							                    }
+					                    },
+					                    error : function() {
+					                    	layer.msg('服务器错误', {
+					                            icon: 5
+					                        });
+					                    }
+					                });
+			     			}else{
+			     				layer.msg('学生角色登录请使用学号', {
+		                            icon: 5
+		                        });
+			     			}
+			     		}	
+					return false;
+				});
+
+			});
+		</script>
+	</body>
+
+</html>

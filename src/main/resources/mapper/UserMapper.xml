@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.score.dao.UserDao">
+	<!-- 获得用户列表 -->
+	<select id="getUser"  resultType="com.score.bean.User" parameterType="com.score.bean.User">
+		select  user_id userId,user_name userName,pass_word password from t_user 
+		<where>
+			<if test="userName !=null and userName !=''">
+					and user_name=#{userName}
+			</if>
+			<if test="password !=null and password !=''">
+					and pass_word=#{password}
+			</if>
+		</where>
+	</select>
+</mapper>
